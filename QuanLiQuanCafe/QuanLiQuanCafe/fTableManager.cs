@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -51,6 +53,7 @@ namespace QuanLiQuanCafe
         {
             lsvBill.Items.Clear();
             List<DTO.Menu> listBillInfo = MenuDAO.Instance.getListMenuByID(id);
+            double totalPrice = 0;
 
             foreach(DTO.Menu item in listBillInfo)
             {
@@ -58,9 +61,16 @@ namespace QuanLiQuanCafe
                 lsvItem.SubItems.Add(item.Count.ToString());
                 lsvItem.SubItems.Add(item.Price.ToString());
                 lsvItem.SubItems.Add(item.TotalPrice.ToString());
+                totalPrice += item.TotalPrice;
 
                 lsvBill.Items.Add(lsvItem);
             }
+            CultureInfo culture = new CultureInfo("vi-VN");
+
+            // Thread.CurrentThread.CurrentCulture = culture;
+
+            txbTotalPrice.Text = totalPrice.ToString("c", culture);
+            
         }
         #endregion
 
