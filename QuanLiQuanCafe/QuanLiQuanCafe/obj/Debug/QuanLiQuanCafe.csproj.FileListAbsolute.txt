@@ -11,3 +11,16 @@ E:\QuanLiQuanCafe\Project\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe
 E:\QuanLiQuanCafe\Project\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe.fTableManager.resources
 E:\QuanLiQuanCafe\Project\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe.fAccountProfile.resources
 E:\QuanLiQuanCafe\Project\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe.fAdmin.resources
+E:\QuanLiQuanCafe\QuanLiQuanCafe\QuanLiQuanCafe\bin\Debug\QuanLiQuanCafe.exe.config
+E:\QuanLiQuanCafe\QuanLiQuanCafe\QuanLiQuanCafe\bin\Debug\QuanLiQuanCafe.exe
+E:\QuanLiQuanCafe\QuanLiQuanCafe\QuanLiQuanCafe\bin\Debug\QuanLiQuanCafe.pdb
+E:\QuanLiQuanCafe\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe.csprojAssemblyReference.cache
+E:\QuanLiQuanCafe\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe.fAccountProfile.resources
+E:\QuanLiQuanCafe\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe.fAdmin.resources
+E:\QuanLiQuanCafe\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe.fLogin.resources
+E:\QuanLiQuanCafe\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe.fTableManager.resources
+E:\QuanLiQuanCafe\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe.Properties.Resources.resources
+E:\QuanLiQuanCafe\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe.csproj.GenerateResource.cache
+E:\QuanLiQuanCafe\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe.csproj.CoreCompileInputs.cache
+E:\QuanLiQuanCafe\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe.exe
+E:\QuanLiQuanCafe\QuanLiQuanCafe\QuanLiQuanCafe\obj\Debug\QuanLiQuanCafe.pdb
