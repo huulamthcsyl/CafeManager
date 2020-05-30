@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace QuanLiQuanCafe.DAO
 {
@@ -15,7 +16,7 @@ namespace QuanLiQuanCafe.DAO
         public static BillInfoDAO Instance
         {
             get { if (instance == null) instance = new BillInfoDAO(); return BillInfoDAO.instance; }
-            set { BillInfoDAO.instance = value; }
+            private set { BillInfoDAO.instance = value; }
         }
 
         private BillInfoDAO() { }
@@ -33,6 +34,11 @@ namespace QuanLiQuanCafe.DAO
             }
 
             return listBillInfo;
+        }
+
+        public void InsertBilInfo(int idTable, int idBill, int count)
+        {
+            DataProvider.Instance.ExcuteNonQuery("EXEC USP_InsertBillInfo @idTable , @idBill , @count", new object[] { idTable, idBill, count });
         }
     }
 }

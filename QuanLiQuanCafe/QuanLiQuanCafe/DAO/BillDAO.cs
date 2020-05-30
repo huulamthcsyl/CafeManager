@@ -14,7 +14,7 @@ namespace QuanLiQuanCafe.DAO
         public static BillDAO Instance
         {
             get { if (instance == null) instance = new BillDAO(); return BillDAO.instance; }
-            set { BillDAO.instance = value; }
+            private set { BillDAO.instance = value; }
         }
 
         private BillDAO() { }
@@ -30,6 +30,29 @@ namespace QuanLiQuanCafe.DAO
             }
 
             return -1;
+        }
+
+        public void InsertBill(int id)
+        {
+            DataProvider.Instance.ExcuteNonQuery("EXEC USP_InsertBill @IdTable", new object[] { id });
+        }
+
+        public int GetMaxIDBill()
+        {
+            try
+            {
+                return (int)DataProvider.Instance.ExcuteScalar("SELECT MAX(id) FROM dbo.Bill");
+            }
+            catch
+            {
+                return 1;
+            }
+        }
+
+        public void CheckOut(int id)
+        {
+            string query = "UPDATE dbo.Bill SET status = 1 WHERE id = " + id;
+            DataProvider.Instance.ExcuteNonQuery(query);
         }
     }
 }

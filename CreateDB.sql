@@ -292,6 +292,20 @@ VALUES
     1       -- status - bit
     )
 
+INSERT dbo.Bill
+(
+    DateCheckIn,
+    DateCheckOut,
+    idTable,
+    status
+)
+VALUES
+(   GETDATE(), -- DateCheckIn - date
+    GETDATE(), -- DateCheckOut - date
+    0,         -- idTable - int
+    NULL       -- status - bit
+    )
+
 -- Add Bill Info
 
 INSERT dbo.BillInfo
@@ -343,7 +357,20 @@ VALUES
     )
 GO
 
+INSERT dbo.BillInfo
+(
+    idBill,
+    idFood,
+    count
+)
+VALUES
+(   4, -- idBill - int
+    1, -- idFood - int
+    1  -- count - int
+    )
+
 SELECT * FROM dbo.Bill
+SELECT * FROM dbo.TableFood
 SELECT * FROM dbo.BillInfo
 SELECT * FROM dbo.Food
 SELECT * FROM dbo.FoodCategory
@@ -352,7 +379,6 @@ SELECT * FROM dbo.Bill WHERE idTable = 1 AND status = 0
 
 SELECT * FROM dbo.BillInfo WHERE idBill = 1
 
-SELECT * FROM dbo.TableFood
 
 SELECT f.name, bi.count, f.price, f.price * bi.count AS totalPrice FROM dbo.BillInfo AS bi, dbo.Bill AS b, dbo.Food AS f
-WHERE bi.idBill = b.id AND bi.idFood = f.id AND b.idTable = 1
+WHERE bi.idBill = b.id AND bi.idFood = f.id AND b.idTable = 3 AND b.status = 0

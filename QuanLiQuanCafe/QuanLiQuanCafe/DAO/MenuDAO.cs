@@ -15,7 +15,7 @@ namespace QuanLiQuanCafe.DAO
         public static MenuDAO Instance
         {
             get { if (instance == null) instance = new MenuDAO(); return MenuDAO.instance; }
-            set { MenuDAO.instance = value; }
+            private set { MenuDAO.instance = value; }
         }
 
         private MenuDAO() { }
