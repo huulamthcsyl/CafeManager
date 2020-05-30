@@ -382,3 +382,103 @@ SELECT * FROM dbo.BillInfo WHERE idBill = 1
 
 SELECT f.name, bi.count, f.price, f.price * bi.count AS totalPrice FROM dbo.BillInfo AS bi, dbo.Bill AS b, dbo.Food AS f
 WHERE bi.idBill = b.id AND bi.idFood = f.id AND b.idTable = 3 AND b.status = 0
+GO
+
+ALTER PROC USP_InsertBill
+@idTable INT
+AS
+BEGIN
+	INSERT dbo.Bill
+	(
+	    DateCheckIn,
+	    DateCheckOut,
+	    idTable,
+	    status
+	)
+	VALUES
+	(   GETDATE(), -- DateCheckIn - date
+	    NULL, -- DateCheckOut - date
+	    @idTable,         -- idTable - int
+	    0       -- status - bit
+	    )
+END
+GO
+
+ALTER PROC USP_InsertBillInfo
+@idBill INT, @idFood INT, @count INT
+AS
+BEGIN
+	
+	DECLARE @isExistBill INT
+	DECLARE @foodCount INT = 0
+
+	SELECT @isExistBill = id, @foodCount = count FROM dbo.BillInfo WHERE idBill = @idBill AND idFood = @idFood
+
+	IF(@isExistBill > 0)
+	BEGIN
+		DECLARE @newCount INT = @foodCount + @count
+		IF(@newCount > 0)
+			UPDATE dbo.BillInfo SET count = @newCount WHERE idFood = @idFood
+		ELSE
+			DELETE dbo.BillInfo WHERE idFood = @idFood
+	END
+	ELSE
+	BEGIN
+		INSERT dbo.BillInfo
+		(
+		    idBill,
+		    idFood,
+		    count
+		)
+		VALUES
+		(   @idBill, -- idBill - int
+		    @idFood, -- idFood - int
+		    @count  -- count - int
+		    )
+	END
+END
+GO
+
+SELECT MAX(id) FROM dbo.Bill
+GO
+
+ALTER TRIGGER UTG_UpdateBillInfo
+ON dbo.BillInfo FOR INSERT, UPDATE
+AS
+BEGIN
+	DECLARE @idBill INT
+
+	SELECT @idBill = idBill FROM Inserted
+
+	DECLARE @idTable INT
+
+	SELECT @idTable = idTable FROM dbo.Bill WHERE id = @idBill AND status = 0
+
+	UPDATE dbo.TableFood SET status = N'Có người' WHERE id = @idTable
+END
+GO
+
+ALTER TRIGGER UTP_UpdateBill
+ON dbo.Bill FOR UPDATE
+AS
+BEGIN
+	DECLARE @idBill INT
+
+	SELECT @idBill = id FROM Inserted
+
+	DECLARE @idTable INT
+
+	SELECT @idTable = idTable FROM dbo.Bill WHERE id = @idBill
+
+	DECLARE @count INT = 0
+
+	SELECT @count = COUNT(*) FROM dbo.Bill WHERE idTable = @idBill AND status = 0
+
+	IF(@count = 0) 
+		UPDATE dbo.TableFood SET status = N'Trống' WHERE id = @idTable
+END
+GO
+
+DELETE dbo.BillInfo
+
+DELETE dbo.Bill
