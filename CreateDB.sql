@@ -393,13 +393,15 @@ BEGIN
 	    DateCheckIn,
 	    DateCheckOut,
 	    idTable,
-	    status
+	    status,
+		discount
 	)
 	VALUES
 	(   GETDATE(), -- DateCheckIn - date
 	    NULL, -- DateCheckOut - date
 	    @idTable,         -- idTable - int
-	    0       -- status - bit
+	    0,       -- status - bit
+		0
 	    )
 END
 GO
@@ -482,3 +484,10 @@ GO
 DELETE dbo.BillInfo
 
 DELETE dbo.Bill
+GO
+
+ALTER TABLE dbo.Bill ADD discount INT
+
+UPDATE dbo.Bill SET discount = 0
+
+SELECT * FROM dbo.Bill

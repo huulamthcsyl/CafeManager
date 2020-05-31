@@ -13,18 +13,21 @@ namespace QuanLiQuanCafe.DTO
         private DateTime? dateCheckIn;
         private DateTime? dateCheckOut;
         private int status;
+        private int discount;
 
         public int ID { get => iD; set => iD = value; }
         public DateTime? DateCheckIn { get => dateCheckIn; set => dateCheckIn = value; }
         public DateTime? DateCheckOut { get => dateCheckOut; set => dateCheckOut = value; }
         public int Status { get => status; set => status = value; }
+        public int Discount { get => discount; set => discount = value; }
 
-        public Bill(int ID, DateTime? dateCheckIn, DateTime? dateCheckOut, int status)
+        public Bill(int ID, DateTime? dateCheckIn, DateTime? dateCheckOut, int status, int discount = 0)
         {
             this.ID = ID;
             this.DateCheckIn = dateCheckIn;
             this.DateCheckOut = dateCheckOut;
             this.Status = status;
+            this.Discount = discount;
         }
 
         public Bill(DataRow row)
@@ -37,6 +40,7 @@ namespace QuanLiQuanCafe.DTO
                 this.DateCheckOut = (DateTime?)dateCheckOutTemp;
             }
             this.Status = Convert.ToInt32(row["status"]);
+            this.Discount = (int)row["discount"];
         }
     }
 }
