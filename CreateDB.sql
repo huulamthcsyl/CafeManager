@@ -460,6 +460,31 @@ BEGIN
 END
 GO
 
+CREATE TRIGGER UTG_UpdateTable
+ON dbo.TableFood FOR UPDATE
+AS
+BEGIN
+	DECLARE @idTable INT
+	DECLARE @status NVARCHAR(100)
+	
+	SELECT @idTable = id, @status = Inserted.status FROM Inserted
+
+	DECLARE @idBill INT
+	
+	SELECT @idBill = id FROM dbo.Bill WHERE idTable = @idTable AND status = 0
+
+	DECLARE @countBillInfo INT
+
+	SELECT @countBillInfo = COUNT(*) FROM dbo.BillInfo WHERE idBill = @idBill
+
+	IF(@countBillInfo > 0 AND @status <> N'Có người')
+		UPDATE dbo.TableFood SET status = N'Có người' WHERE id = @idTable
+	ELSE IF(@countBillInfo <= 0 AND  @status <> N'Trống')
+		UPDATE dbo.TableFood SET status = N'Trống' WHERE id = @idTable
+
+END
+GO
+
 ALTER TRIGGER UTP_UpdateBill
 ON dbo.Bill FOR UPDATE
 AS
@@ -491,3 +516,69 @@ ALTER TABLE dbo.Bill ADD discount INT
 UPDATE dbo.Bill SET discount = 0
 
 SELECT * FROM dbo.Bill
+GO
+
+ALTER PROC USP_SwitchTable
+@idTable1 INT, @idTable2 INT
+AS
+BEGIN
+
+	DECLARE @idFirstBill INT
+	DECLARE @idSecondBill INT
+
+	SELECT @idSecondBill = id FROM dbo.Bill WHERE idTable = @idTable2 AND status = 0
+	SELECT @idFirstBill = id FROM dbo.Bill WHERE idTable = @idTable1 AND status = 0
+
+	IF(@idFirstBill IS NULL)
+	BEGIN
+		INSERT dbo.Bill
+		(
+		    DateCheckIn,
+		    DateCheckOut,
+		    idTable,
+		    status,
+		    discount
+		)
+		VALUES
+		(   GETDATE(), -- DateCheckIn - date
+		    NULL, -- DateCheckOut - date
+		    @idTable1,         -- idTable - int
+		    0,      -- status - bit
+		    0          -- discount - int
+		    )
+
+		SELECT @idFirstBill = MAX(id) FROM dbo.Bill
+	END
+
+	IF(@idSecondBill IS NULL)
+	BEGIN
+		INSERT dbo.Bill
+		(
+		    DateCheckIn,
+		    DateCheckOut,
+		    idTable,
+		    status,
+		    discount
+		)
+		VALUES
+		(   GETDATE(), -- DateCheckIn - date
+		    NULL, -- DateCheckOut - date
+		    @idTable2,         -- idTable - int
+		    0,      -- status - bit
+		    0          -- discount - int
+		    )
+
+		SELECT @idSecondBill = MAX(id) FROM dbo.Bill
+	END
+
+	SELECT id INTO IDBillInfoTable FROM dbo.BillInfo WHERE idBill = @idSecondBill
+
+	UPDATE dbo.BillInfo SET idBill = @idSecondBill WHERE idBill = @idFirstBill
+
+	UPDATE dbo.BillInfo SET idBill = @idFirstBill WHERE id IN (SELECT * FROM dbo.IDBillInfoTable)
+
+	DROP TABLE dbo.IDBillInfoTable
+END
+GO
+
+EXEC USP_SwitchTable @idTable1 = 5 , @idTable2 = 6

@@ -24,6 +24,8 @@ namespace QuanLiQuanCafe
             LoadTable();
 
             LoadCategory();
+
+            LoadComboboxTable(cbSwitchTable);
         }
 
         #region METHODS
@@ -90,6 +92,13 @@ namespace QuanLiQuanCafe
             cbFood.DataSource = listFood;
             cbFood.DisplayMember = "Name";
         }
+
+        void LoadComboboxTable(ComboBox cb)
+        {
+            cb.DataSource = TableDAO.Instance.LoadTableList();
+            cb.DisplayMember = "Name";
+        }
+
         #endregion
 
         #region EVENTS
@@ -177,8 +186,22 @@ namespace QuanLiQuanCafe
                 }
             }
         }
-        #endregion
 
+        private void btnSwitchTable_Click(object sender, EventArgs e)
+        {
+            int id1 = (lsvBill.Tag as Table).ID;
+            int id2 = (cbSwitchTable.SelectedItem as Table).ID;
+
+            string name1 = (lsvBill.Tag as Table).Name;
+            string name2 = (cbSwitchTable.SelectedItem as Table).Name;
+
+            if (MessageBox.Show(String.Format("Bạn có muốn chuyển bàn {0} qua bàn {1} không?", name1, name2), "Thông báo", MessageBoxButtons.OKCancel) == DialogResult.OK){
+                TableDAO.Instance.SwitchTable(id1, id2);
+                LoadTable();
+            }
+        }
+
+        #endregion
 
     }
 }
