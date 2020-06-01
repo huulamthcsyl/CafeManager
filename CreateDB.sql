@@ -580,3 +580,20 @@ END
 GO
 
 EXEC USP_SwitchTable @idTable1 = 5 , @idTable2 = 6
+GO
+
+ALTER TABLE dbo.Bill ADD totalPrice FLOAT
+
+DELETE dbo.BillInfo
+DELETE dbo.Bill
+GO
+
+ALTER PROC USP_GetListBillByDate
+@checkin DATE, @checkout DATE
+AS
+BEGIN
+	SELECT t.name AS [Tên bàn], b.totalPrice AS [Tổng tiền], DateCheckIn AS [Ngày vào], DateCheckOut AS [Ngày ra], discount AS [Giảm giá]
+	FROM dbo.Bill AS b, dbo.TableFood AS t
+	WHERE DateCheckIn >= @checkin AND DateCheckOut <= @checkout AND b.status = 1 AND b.idTable = t.id
+END
+GO

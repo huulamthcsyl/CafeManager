@@ -32,8 +32,8 @@
             this.tpBill = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnViewBill = new System.Windows.Forms.Button();
-            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.dtpkToDate = new System.Windows.Forms.DateTimePicker();
+            this.dtpkFromDate = new System.Windows.Forms.DateTimePicker();
             this.panel1 = new System.Windows.Forms.Panel();
             this.dtgvBill = new System.Windows.Forms.DataGridView();
             this.tpFood = new System.Windows.Forms.TabPage();
@@ -181,8 +181,8 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.btnViewBill);
-            this.panel2.Controls.Add(this.dateTimePicker2);
-            this.panel2.Controls.Add(this.dateTimePicker1);
+            this.panel2.Controls.Add(this.dtpkToDate);
+            this.panel2.Controls.Add(this.dtpkFromDate);
             this.panel2.Location = new System.Drawing.Point(6, 6);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(756, 24);
@@ -196,20 +196,21 @@
             this.btnViewBill.TabIndex = 2;
             this.btnViewBill.Text = "Thống kê";
             this.btnViewBill.UseVisualStyleBackColor = true;
+            this.btnViewBill.Click += new System.EventHandler(this.btnViewBill_Click);
             // 
-            // dateTimePicker2
+            // dtpkToDate
             // 
-            this.dateTimePicker2.Location = new System.Drawing.Point(553, 3);
-            this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePicker2.TabIndex = 1;
+            this.dtpkToDate.Location = new System.Drawing.Point(553, 3);
+            this.dtpkToDate.Name = "dtpkToDate";
+            this.dtpkToDate.Size = new System.Drawing.Size(200, 20);
+            this.dtpkToDate.TabIndex = 1;
             // 
-            // dateTimePicker1
+            // dtpkFromDate
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(3, 3);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePicker1.TabIndex = 0;
+            this.dtpkFromDate.Location = new System.Drawing.Point(3, 3);
+            this.dtpkFromDate.Name = "dtpkFromDate";
+            this.dtpkFromDate.Size = new System.Drawing.Size(200, 20);
+            this.dtpkFromDate.TabIndex = 0;
             // 
             // panel1
             // 
@@ -221,6 +222,7 @@
             // 
             // dtgvBill
             // 
+            this.dtgvBill.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dtgvBill.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dtgvBill.Location = new System.Drawing.Point(0, 3);
             this.dtgvBill.Name = "dtgvBill";
@@ -1007,8 +1009,8 @@
         private System.Windows.Forms.TabPage tpTable;
         private System.Windows.Forms.TabPage tpAccount;
         private System.Windows.Forms.Button btnViewBill;
-        private System.Windows.Forms.DateTimePicker dateTimePicker2;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker dtpkToDate;
+        private System.Windows.Forms.DateTimePicker dtpkFromDate;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.TextBox txbSearchFoodName;
