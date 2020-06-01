@@ -456,32 +456,14 @@ BEGIN
 
 	SELECT @idTable = idTable FROM dbo.Bill WHERE id = @idBill AND status = 0
 
-	UPDATE dbo.TableFood SET status = N'Có người' WHERE id = @idTable
-END
-GO
+	DECLARE @count INT = 0
 
-CREATE TRIGGER UTG_UpdateTable
-ON dbo.TableFood FOR UPDATE
-AS
-BEGIN
-	DECLARE @idTable INT
-	DECLARE @status NVARCHAR(100)
-	
-	SELECT @idTable = id, @status = Inserted.status FROM Inserted
+	SELECT @count = COUNT(*) FROM dbo.BillInfo WHERE idBill = @idBill
 
-	DECLARE @idBill INT
-	
-	SELECT @idBill = id FROM dbo.Bill WHERE idTable = @idTable AND status = 0
-
-	DECLARE @countBillInfo INT
-
-	SELECT @countBillInfo = COUNT(*) FROM dbo.BillInfo WHERE idBill = @idBill
-
-	IF(@countBillInfo > 0 AND @status <> N'Có người')
+	IF(@count > 0)
 		UPDATE dbo.TableFood SET status = N'Có người' WHERE id = @idTable
-	ELSE IF(@countBillInfo <= 0 AND  @status <> N'Trống')
+	ELSE 
 		UPDATE dbo.TableFood SET status = N'Trống' WHERE id = @idTable
-
 END
 GO
 
@@ -525,6 +507,8 @@ BEGIN
 
 	DECLARE @idFirstBill INT
 	DECLARE @idSecondBill INT
+	DECLARE @isFirstTableEmpty INT = 1
+	DECLARE @isSecondTableEmpty INT = 1
 
 	SELECT @idSecondBill = id FROM dbo.Bill WHERE idTable = @idTable2 AND status = 0
 	SELECT @idFirstBill = id FROM dbo.Bill WHERE idTable = @idTable1 AND status = 0
@@ -547,8 +531,12 @@ BEGIN
 		    0          -- discount - int
 		    )
 
-		SELECT @idFirstBill = MAX(id) FROM dbo.Bill
+		SELECT @idFirstBill = MAX(id) FROM dbo.Bill WHERE idTable = @idTable1 AND status = 0
+
+		SET @isFirstTableEmpty = 1
 	END
+
+	SELECT @isFirstTableEmpty = COUNT(*) FROM dbo.BillInfo WHERE idBill = @idFirstBill
 
 	IF(@idSecondBill IS NULL)
 	BEGIN
@@ -568,8 +556,12 @@ BEGIN
 		    0          -- discount - int
 		    )
 
-		SELECT @idSecondBill = MAX(id) FROM dbo.Bill
+		SELECT @idSecondBill = MAX(id) FROM dbo.Bill WHERE idTable = @idTable2 AND status = 0
+
+		SET @isSecondTableEmpty = 1
 	END
+
+	SELECT @isSecondTableEmpty = COUNT(*) FROM dbo.BillInfo WHERE idBill = @idSecondBill
 
 	SELECT id INTO IDBillInfoTable FROM dbo.BillInfo WHERE idBill = @idSecondBill
 
@@ -578,6 +570,12 @@ BEGIN
 	UPDATE dbo.BillInfo SET idBill = @idFirstBill WHERE id IN (SELECT * FROM dbo.IDBillInfoTable)
 
 	DROP TABLE dbo.IDBillInfoTable
+
+	IF(@isFirstTableEmpty = 0)
+	 UPDATE dbo.TableFood SET status = N'Trống' WHERE id = @idTable2
+
+	IF(@isSecondTableEmpty = 0)
+	 UPDATE dbo.TableFood SET status = N'Trống' WHERE id = @idTable1
 END
 GO
 
