@@ -17,9 +17,19 @@ namespace QuanLiQuanCafe
 {
     public partial class fTableManager : Form
     {
-        public fTableManager()
+        private Account loginAccount;
+
+        public Account LoginAccount 
+        { 
+            get { return loginAccount; }
+            set { loginAccount = value; ChangeAccount(loginAccount.Type); }
+        }
+
+        public fTableManager(Account acc)
         {
             InitializeComponent();
+
+            this.LoginAccount = acc;
 
             LoadTable();
 
@@ -29,6 +39,13 @@ namespace QuanLiQuanCafe
         }
 
         #region METHODS
+
+        void ChangeAccount(int type)
+        {
+            adminToolStripMenuItem.Enabled = type == 1;
+            thôngTinTàiKhoảnToolStripMenuItem.Text += " (" + LoginAccount.DisplayName + ")";
+        }
+
         void LoadTable()
         {
             flpTable.Controls.Clear();
@@ -117,8 +134,14 @@ namespace QuanLiQuanCafe
 
         private void thôngTinTàiKhoảnToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fAccountProfile f = new fAccountProfile();
+            fAccountProfile f = new fAccountProfile(loginAccount);
+            f.UpdateAccountInfo += F_UpdateAccountInfo;
             f.ShowDialog();
+        }
+
+        private void F_UpdateAccountInfo(object sender, AccountEvent e)
+        {
+            thôngTinTàiKhoảnToolStripMenuItem.Text = "Thông tin tài khoản (" + e.Acc.DisplayName + ")";
         }
 
         private void adminToolStripMenuItem_Click(object sender, EventArgs e)

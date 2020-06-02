@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuanLiQuanCafe.DTO;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -26,6 +27,25 @@ namespace QuanLiQuanCafe.DAO
             DataTable result = DataProvider.Instance.ExcuteQuery(query, new object[] { username, password });
 
             return result.Rows.Count > 0;
+        }
+
+        public Account GetAccountByUsername(string username)
+        {
+            DataTable data = DataProvider.Instance.ExcuteQuery("SELECT * FROM dbo.Account WHERE username = N'" + username + "'");
+
+            foreach(DataRow item in data.Rows)
+            {
+                return new Account(item);
+            }
+
+            return null;
+        }
+
+        public bool UpdateAccount(string username, string displayName, string password, string newPassword)
+        {
+            int result = DataProvider.Instance.ExcuteNonQuery("EXEC USP_UpdateAccount @username , @displayName , @password , @newPassword", new object[] {username, displayName, password, newPassword });
+
+            return result > 0;
         }
     }
 }
